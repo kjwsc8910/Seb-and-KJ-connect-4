@@ -1,17 +1,17 @@
 import os
 import sys
+
 #from tkinter import *
 
 #Summery of KJs programming style / problem solving skills https://www.reddit.com/r/Unexpected/comments/kybti8/watch_this/
 
 Colours = ["Red", "Yellow"]
-GridXSize = 4
-GridYSize = 4
+GridSize = [4,4]
 
 
 def checkCollumn(_collumn, _board):
     #Check if full (-1), empty (Index of lowest avalible slot)
-    if _board[_collumn][len(_board[_collumn]) - 1] != 0:
+    if _board[_collumn][len(_board[_collumn]) - 1] != " ":
         print("Error: Collumn Full!")
         return -1
     for i in range(0, len(_board[_collumn])):
@@ -68,7 +68,8 @@ def Menu():
     print("4. Exit Game")
     Choice = input("/: ")
     if Choice == "1":
-        OnAwake()
+        Board = [[" "] * GridSize[1] for i in range(GridSize[0])]
+        OnAwake(Board , GridSize[0], GridSize[1])
     elif Choice == "2":
         Settings()
     elif Choice == "3":
@@ -83,8 +84,9 @@ def Menu():
 
 def Settings():
     print("Settings")
-    print("Colour Combo = ", Colours[0] + Colours[1])
-    print("Grid Size = ", str(GridXSize) + "" + str(GridYSize))
+    print("Colour Combo = ", Colours[0] + " " + Colours[1])
+    print("Grid Size = ", str(GridSize[0]) + " " + str(GridSize[1]))
+    print("#Note changing grid size will cause the game to begin")
     print("Return to menu (type in menu)")
     Change = input("What would you like to change?: ")
     if Change.lower() in ("colour", "colour combo"):
@@ -97,9 +99,20 @@ def Settings():
     elif Change.lower() in ("menu", "back to menu", "return to menu","menu please"):
         Menu()
     elif Change.lower() in ("grid size", "grid system", "grid"):
-        return
-        #KJ do
-
+      Incorrect = True
+      while Incorrect:
+        gridXSize = int(input("Please Enter A Grid Size For the X: "))
+        gridYSize = int(input("Please Enter A Grid Size For the Y: "))
+        if ((gridXSize < 4) & (gridYSize < 4)):
+          print("Error: Game Unwinnable!")
+          print("Try again")
+        else:
+          Incorrect = True
+          Board = [[" "] * gridYSize for i in range(gridXSize)]
+          OnAwake(Board, gridXSize, gridYSize)
+    else:
+      print("Invalid Syntax")
+      Settings()
 
 def Credits():
     print(
@@ -110,18 +123,8 @@ def Credits():
     Menu()
 
 
-def OnAwake():
-    #Mini menu system
-    gridXSize = int(input("Please Enter A Grid Size For the X: "))
-    gridYSize = int(input("Please Enter A Grid Size For the Y: "))
-
-    if ((gridXSize < 4) & (gridYSize < 4)):
-        print("Error: Game Unwinnable!")
-        Menu()
-    print("")
-
+def OnAwake(Board, gridXSize, gridYSize):
     #This whole section looks so dumb... I love it!
-    Board = [[0] * gridYSize for i in range(gridXSize)]
     #Sometimes my genious is... Its almost frightening
     print("Player 1 pick your colour out of", Colours[0] + " or " + Colours[1])
     sometimesKJsGeniousIsFrightening = input(": ")
@@ -144,7 +147,7 @@ def Turn(Board, gridXSize, gridYSize):
   #Player 1 turn
   MoveComplete = False
   while MoveComplete == False:
-    #try:
+    try:
       #Select Collumn
       Player1MoveC = int(
           input("P1 What column would you like to drop your counter: "))
@@ -158,17 +161,16 @@ def Turn(Board, gridXSize, gridYSize):
         Board = updateBoard(Board, Player1MoveC, RowMove, "X")
         printBoard(Board, gridXSize, gridYSize)
         MoveComplete = True
-  #except:
-  #print("Invalid Syntax")
+    except:
+      print("Invalid Syntax")
 
   CheckForWin(Board)
 
   #Player2 Turn
   Move2Complete = False
   while Move2Complete == False:
-      #try:
-      Player2MoveC = int(
-        input("P2 What column would you like to drop your counter: "))
+    try:
+      Player2MoveC = int(input("P2 What column would you like to drop your counter: "))
       RowMove = checkCollumn(Player2MoveC, Board)
       if RowMove == -1:
         Move2Complete = False
@@ -177,8 +179,8 @@ def Turn(Board, gridXSize, gridYSize):
         Board = updateBoard(Board, Player2MoveC, RowMove, "O")
         printBoard(Board, gridXSize, gridYSize)
         Move2Complete = True
-  #except:
-      #print("Invalid Syntax")
+    except:
+      print("Invalid Syntax")
 
   CheckForWin(Board)
   Turn(Board, gridXSize, gridYSize)
@@ -188,7 +190,7 @@ def RestartGame():
     #Asks for continuation or ends
     Choice = input("Would you like to restart the Game?: ")
     if Choice.lower() in ("y", "yes", "yeah", "yep", "why not"):
-        OnAwake()
+        Menu()
     else:
         print("Credits to Seb and KJ")
         sys.exit("Thanks for playing")
