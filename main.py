@@ -94,8 +94,7 @@ def Settings():
         Colours[1] = Colour2
         print("Returning")
         Settings()
-    elif Change.lower() in ("menu", "back to menu", "return to menu",
-      "menu please"):
+    elif Change.lower() in ("menu", "back to menu", "return to menu","menu please"):
         Menu()
     elif Change.lower() in ("grid size", "grid system", "grid"):
         return
