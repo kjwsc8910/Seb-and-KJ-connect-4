@@ -1,13 +1,13 @@
 import os
 import sys
+
 #from tkinter import *
 
 #Summery of KJs programming style / problem solving skills https://www.reddit.com/r/Unexpected/comments/kybti8/watch_this/
 
 Colours = ["Red", "Yellow"]
-GridXSize = 4
-GridYSize = 4
-
+gridXSize = 4
+gridYSize = 4
 
 def checkCollumn(_collumn, _board):
     #Check if full (-1), empty (Index of lowest avalible slot)
@@ -53,7 +53,7 @@ def printBoard(_board, _gridXSize, _gridYSize):
     #DisplayInTk(temp2)
 
 
-def Menu():
+def Menu(gridXSize, gridYSize):
     print("""
   _________                                     __       _____  
 \_   ___ \  ____   ____   ____   ____   _____/  |_    /  |  | 
@@ -68,9 +68,10 @@ def Menu():
     print("4. Exit Game")
     Choice = input("/: ")
     if Choice == "1":
-        OnAwake()
+        Board = [[0] * gridYSize for i in range(gridXSize)]
+        OnAwake(Board , gridXSize, gridYSize)
     elif Choice == "2":
-        Settings()
+        Settings(gridXSize, gridYSize)
     elif Choice == "3":
         Credits()
     elif Choice() == "4":
@@ -78,13 +79,14 @@ def Menu():
     else:
         print("Invalid Syntax")
         print("Returning...")
-        Menu()
+        Menu(gridXSize, gridYSize)
 
 
-def Settings():
+def Settings(gridXSize, gridYSize):
     print("Settings")
-    print("Colour Combo = ", Colours[0] + Colours[1])
-    print("Grid Size = ", str(GridXSize) + "" + str(GridYSize))
+    print("Colour Combo = ", Colours[0] + " " + Colours[1])
+    print("Grid Size = ", str(gridXSize) + " " + str(gridYSize))
+    print("#Note changing grid size will cause the game to begin")
     print("Return to menu (type in menu)")
     Change = input("What would you like to change?: ")
     if Change.lower() in ("colour", "colour combo"):
@@ -95,11 +97,22 @@ def Settings():
         print("Returning")
         Settings()
     elif Change.lower() in ("menu", "back to menu", "return to menu","menu please"):
-        Menu()
+        Menu(gridXSize, gridYSize)
     elif Change.lower() in ("grid size", "grid system", "grid"):
-        return
-        #KJ do
-
+      Incorrect = True
+      while Incorrect:
+        gridXSize = int(input("Please Enter A Grid Size For the X: "))
+        gridYSize = int(input("Please Enter A Grid Size For the Y: "))
+        if ((gridXSize < 4) & (gridYSize < 4)):
+          print("Error: Game Unwinnable!")
+          print("Try again")
+        else:
+          Incorrect = True
+          Board = [[0] * gridYSize for i in range(gridXSize)]
+          OnAwake(Board, gridXSize, gridYSize)
+    else:
+      print("Invalid Syntax")
+      Settings(gridXSize, gridYSize)
 
 def Credits():
     print(
@@ -107,21 +120,11 @@ def Credits():
     )
     print("anyways hope you enjoyed our amazing game")
     print("Returning to menu")
-    Menu()
+    Menu(gridXSize, gridYSize)
 
 
-def OnAwake():
-    #Mini menu system
-    gridXSize = int(input("Please Enter A Grid Size For the X: "))
-    gridYSize = int(input("Please Enter A Grid Size For the Y: "))
-
-    if ((gridXSize < 4) & (gridYSize < 4)):
-        print("Error: Game Unwinnable!")
-        Menu()
-    print("")
-
+def OnAwake(Board, gridXSize, gridYSize):
     #This whole section looks so dumb... I love it!
-    Board = [[0] * gridYSize for i in range(gridXSize)]
     #Sometimes my genious is... Its almost frightening
     print("Player 1 pick your colour out of", Colours[0] + " or " + Colours[1])
     sometimesKJsGeniousIsFrightening = input(": ")
@@ -144,7 +147,7 @@ def Turn(Board, gridXSize, gridYSize):
   #Player 1 turn
   MoveComplete = False
   while MoveComplete == False:
-    #try:
+    try:
       #Select Collumn
       Player1MoveC = int(
           input("P1 What column would you like to drop your counter: "))
@@ -158,17 +161,16 @@ def Turn(Board, gridXSize, gridYSize):
         Board = updateBoard(Board, Player1MoveC, RowMove, "X")
         printBoard(Board, gridXSize, gridYSize)
         MoveComplete = True
-  #except:
-  #print("Invalid Syntax")
+    except:
+      print("Invalid Syntax")
 
-  CheckForWin(Board)
+  CheckForWin(Board, gridXSize, gridYSize)
 
   #Player2 Turn
   Move2Complete = False
   while Move2Complete == False:
-      #try:
-      Player2MoveC = int(
-        input("P2 What column would you like to drop your counter: "))
+    try:
+      Player2MoveC = int(input("P2 What column would you like to drop your counter: "))
       RowMove = checkCollumn(Player2MoveC, Board)
       if RowMove == -1:
         Move2Complete = False
@@ -177,24 +179,24 @@ def Turn(Board, gridXSize, gridYSize):
         Board = updateBoard(Board, Player2MoveC, RowMove, "O")
         printBoard(Board, gridXSize, gridYSize)
         Move2Complete = True
-  #except:
-      #print("Invalid Syntax")
+    except:
+      print("Invalid Syntax")
 
-  CheckForWin(Board)
+  CheckForWin(Board, gridXSize, gridYSize)
   Turn(Board, gridXSize, gridYSize)
 
 
-def RestartGame():
+def RestartGame(gridXSize, gridYSize):
     #Asks for continuation or ends
     Choice = input("Would you like to restart the Game?: ")
     if Choice.lower() in ("y", "yes", "yeah", "yep", "why not"):
-        OnAwake()
+        Menu(gridXSize, gridYSize)
     else:
         print("Credits to Seb and KJ")
         sys.exit("Thanks for playing")
 
 
-def CheckForWin(Board):
+def CheckForWin(Board, gridXSize, gridYSize):
     #Checks for win for each player
     for i in range(0, 4):
         j = 0
@@ -202,22 +204,22 @@ def CheckForWin(Board):
                 j + 3] == "X":
             print("Player 1 wins")
             print("")
-            RestartGame()
+            RestartGame(gridXSize, gridYSize)
         elif Board[i][j] == Board[i][j + 1] == Board[i][j + 2] == Board[i][
                 j + 3] == "O":
             print("Player 2 wins")
             print("")
-            RestartGame()
+            RestartGame(gridXSize, gridYSize)
         elif Board[j][i] == Board[j + 1][i] == Board[j + 2][i] == Board[
                 j + 3][i] == "X":
             print("Player 1 wins")
             print("")
-            RestartGame()
+            RestartGame(gridXSize, gridYSize)
         elif Board[j][i] == Board[j + 1][i] == Board[j + 2][i] == Board[
                 j + 3][i] == "O":
             print("Player 2 wins")
             print("")
-            RestartGame()
+            RestartGame(gridXSize, gridYSize)
 
 
 #def DisplayInTk(temp2):
@@ -231,4 +233,4 @@ def CheckForWin(Board):
 #Buttons[i][j].grid(row = j, column =i)
 #return
 
-Menu()
+Menu(gridXSize, gridYSize)
