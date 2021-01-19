@@ -262,25 +262,36 @@ def CheckDiagonal(Board, gridXSize, gridYSize):
 
 
 def CheckDiagonalL(Board, gridXSize, gridYSize, x, y):
-  CountP2 = 1 if Board[x][y] == "O" else 0 
   Count = 1 if Board[x][y] == "X" else 0
-  while ((y + 1) < (gridYSize)) & ((x - 1) < gridXSize)):
+  CountP2 = 1 if Board[x][y] == "O" else 0
+  while ((y + 1) < (gridYSize)) & ((x - 1) < gridXSize):
       x -= 1
       y += 1
-      Count += 1 if Board[x][y] == "X" else Count = 0 
-      CountP2 += 1 if Board[x][y] == "X" else CountP2 = 0 
+      Count = Count + 1 if Board[x][y] == "X" else 0 
+      CountP2 = CountP2 + 1 if Board[x][y] == "X" else 0 
+      if Count == 4:
+        print("Player 1 Wins")
+        RestartGame(gridXSize, gridYSize)
+      if CountP2 == 4:
+        print("Player 2 Wins")
+        RestartGame(gridXSize, gridYSize) 
   
 
 
 def CheckDiagonalR(Board, gridXSize, gridYSize, x, y):
-  Count = 1 if Board[x][y] == "X" else Count = 0
-  CountP2 = 1 if Board[x][y] == "O" else CountP2 = 0
-  while stop == "false":
-    if ((x + 1) < gridXSize) & ((y + 1) < gridYSize):
-      Count += 1 if Board[x][y] == "X" else Count = 0
-      CountP2 += 1 if Board[x][y] == "O" else CountP2 = 0
-      x += 1
-     y 
+  Count = 1 if Board[x][y] == "X" else 0
+  CountP2 = 1 if Board[x][y] == "O" else 0
+  while ((x + 1) < gridXSize) & ((y + 1) < gridYSize):
+    x += 1
+    y += 1
+    Count = Count + 1 if Board[x][y] == "X" else 0
+    CountP2 = CountP2 + 1 if Board[x][y] == "O" else 0
+    if Count == 4:
+      print("Plyer 1 Wins")
+      RestartGame(gridXSize, gridYSize)
+    if CountP2 == 4:
+      print("Player 2 Wins")
+      RestartGame(gridXSize, gridYSize)    
 
 
 
