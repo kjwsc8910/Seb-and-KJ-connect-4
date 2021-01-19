@@ -241,6 +241,12 @@ def CheckForWin(Board, gridXSize, gridYSize):
           RestartGame(gridXSize, gridYSize)
       else:
         CountP2 = 0
+
+  #DILIGAF How ugly and inefficient this is going to be, refere to :
+  #https://www.reddit.com/r/Unexpected/comments/kybti8/watch_this/
+  #For an explaination
+
+  
         
     
 #def DisplayInTk(temp2):
