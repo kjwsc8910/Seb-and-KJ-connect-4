@@ -202,26 +202,12 @@ def RestartGame(gridXSize, gridYSize):
 
 
 def CheckForWin(Board, gridXSize, gridYSize):
-  Count = 0
-  CountP2 = 0
-  for x in range(0, gridXSize):
-    for y in range(0, gridYSize):
-      if Board[x][y] == "X":
-        Count += 1
-        if Count == 4:
-          print("Player 1 Wins")
-          RestartGame(gridXSize, gridYSize)
-      else:
-        Count = 0
+  CheckHorizontal(Board, gridXSize, gridYSize)
+  CheckVertical(Board, gridXSize, gridYSize)
+  CheckDiagonal(Board, gridXSize, gridYSize)
 
-      if Board[x][y] == "O":
-        CountP2 += 1
-        if CountP2 == 4:
-          print("Player 2 Wins")
-          RestartGame(gridXSize, gridYSize)
-      else:
-        CountP2 = 0  
 
+def CheckHorizontal(Board, gridXSize, gridSsize):
   Count = 0
   CountP2 = 0
   for y in range(0, gridYSize):
@@ -242,11 +228,93 @@ def CheckForWin(Board, gridXSize, gridYSize):
       else:
         CountP2 = 0
 
+def CheckVertical(Board, gridXSize, gridYSize):
+  Count = 0
+  CountP2 = 0
+  for x in range(0, gridXSize):
+    for y in range(0, gridYSize):
+      if Board[x][y] == "X":
+        Count += 1
+        if Count == 4:
+          print("Player 1 Wins")
+          RestartGame(gridXSize, gridYSize)
+      else:
+        Count = 0
+
+      if Board[x][y] == "O":
+        CountP2 += 1
+        if CountP2 == 4:
+          print("Player 2 Wins")
+          RestartGame(gridXSize, gridYSize)
+      else:
+        CountP2 = 0 
+
+def CheckDiagonal(Board, gridXSize, gridYSize):
+  for x in range(0, gridXSize):
+    y = 0
+    CheckDiagonalR(Board, gridXSize, gridYSize, x, y)
+    CheckDiagonalL(Board, gridXSize, gridYSize, x, y)
+  for y in range(0, gridYSize):
+    x = 0
+    CheckDiagonalR(Board, gridXSize, gridYSize, x, y)
+    x = gridXSize - 1
+    CheckDiagonalL(Board, gridXSize, gridYSize, x, y)
+
+
+def CheckDiagonalL(Board, gridXSize, gridYSize, x, y):
+  CountP2 = 1 if Board[x][y] == "O" else 0 
+  Count = 1 if Board[x][y] == "X" else 0
+  while ((y + 1) < (gridYSize)) & ((x - 1) < gridXSize)):
+      x -= 1
+      y += 1
+      Count += 1 if Board[x][y] == "X" else Count = 0 
+      CountP2 += 1 if Board[x][y] == "X" else CountP2 = 0 
+  
+
+
+def CheckDiagonalR(Board, gridXSize, gridYSize, x, y):
+  Count = 1 if Board[x][y] == "X" else Count = 0
+  CountP2 = 1 if Board[x][y] == "O" else CountP2 = 0
+  while stop == "false":
+    if ((x + 1) < gridXSize) & ((y + 1) < gridYSize):
+      Count += 1 if Board[x][y] == "X" else Count = 0
+      CountP2 += 1 if Board[x][y] == "O" else CountP2 = 0
+      x += 1
+     y 
+
+
+
   #DILIGAF How ugly and inefficient this is going to be, refere to :
   #https://www.reddit.com/r/Unexpected/comments/kybti8/watch_this/
   #For an explaination
 
   
+
+  
+  # y = 0
+  # for k in range(0, gridYSize):
+  #   while k <= gridYSize:
+  #     for x in range(0, gridXSize):
+  #       if Board[x][y+k] == "X":
+  #         Count += 1
+  #         if Count == 4:
+  #           print("Player 1 Wins")
+  #           RestartGame(gridXSize, gridYSize)
+  #       else:
+  #         Count = 0
+  #     if y <= gridYSize:
+  #       y += 1 
+  
+  # for k in range(0, gridYSize):
+  #   while k-1 <= gridYSize:
+  #     for x ,y in zip(gridXSize,gridYSize):
+  #         if Board[x][y+k] == "O":
+  #           CountP2 += 1
+  #           if CountP2 == 4:
+  #             print("Player 2 Wins")
+  #             RestartGame(gridXSize, gridYSize)
+  #         else:
+  #           CountP2 = 0
         
     
 #def DisplayInTk(temp2):
